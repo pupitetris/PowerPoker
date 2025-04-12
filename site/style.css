@@ -1,0 +1,256 @@
+body {
+	background-color: black;
+	position: relative;
+	margin: 0;
+	font-family: serif;
+	font-size: 22px;
+	color: #ffffc0;
+}
+
+a {
+	color: #00ff00;
+	font-weight: bold;
+}
+
+#border {
+	background-image: url(img/felt_red.png);
+	background-color: red;
+	width: 750px;
+	height: 645px;
+	margin: auto;
+}
+
+#game {
+	background-image: url(img/felt.png);
+	background-color: green;
+	width: 700px;
+	height: 620px;
+	margin: auto;
+	position: relative;
+}
+
+#title {
+	border-bottom: 2px solid;
+	font-size: 32px;
+	color: #c0c000;
+	font-variant: small-caps;
+	line-height: 20px;
+	text-align: center;
+	width: 278px;
+	margin: auto;
+	padding-top: 10px;
+}
+
+#title .t1 {
+	font-size: 150%;
+}
+
+#title .t2 {
+	font-size: 125%;
+}
+
+#board {
+	position: relative;
+	top: 20px;
+	margin: auto;
+	width: 618px;
+}
+
+#slots {
+	position: relative;
+	width: 430px;
+	margin: auto;
+}
+
+#fly {
+	display: none;
+}
+
+#scorebox {
+	position: absolute;
+	top: 353px;
+	left: 525px;
+	text-align: center;
+	width: 134px;
+}
+
+#scorebox p {
+	margin-top: 1em;
+	margin-bottom: 0px;
+}
+
+#hand {
+	position: absolute;
+	top: 65px;
+	left: 530px;
+	width: 124px;
+	text-align: center;
+}
+
+.gameover {
+	text-decoration: blink;
+	color: yellow;
+}
+
+.chip {
+	width: 74px;
+	height: 74px;
+	position: absolute;
+	left: 32px;
+	cursor: pointer;
+}
+
+#infochip {
+	top: 235px;
+	background-image: url(img/info.png);
+}
+
+#infochip span {
+	width: 23px;
+	height: 29px;
+	background-image: url(img/hand.png);
+	left: 23px;
+	top: 19px;
+	position: absolute;
+	display: none;
+}
+
+#infochip:hover span {
+	background-image: none;
+}
+
+#handchip {
+	top: 332px;
+	background-image: url(img/hand_chip.png);
+}
+
+#infowindow {
+	position: relative;
+	width: 430px;
+	top: 10px;
+	left: 0px;
+	margin: auto;
+	font-size: 80%;
+	display: none;
+}
+
+#infowindow p {
+	text-align: justify;
+	text-indent: 1.5em;
+}
+
+#scoretable table,caption {
+	margin: auto;
+}
+
+#scoretable caption {
+	padding-bottom: 1em;
+	font-size: 21px;
+	color: #c0c000;
+}
+
+#scoretable td,th {
+	border-bottom: 1px dotted black;
+}
+
+#scoretable th {
+	text-align: left;
+	width: 11em;
+	color: white;
+}
+
+#scoretable td {
+	text-align: right;
+}
+
+.card {
+	background-color: #ffffc0;
+	position: absolute;
+	width: 78px;
+	height: 97px;
+}
+
+.card span {
+	width: 78px;
+	height: 97px;
+	position: absolute;
+}
+
+.card.reverse {
+	background-image: url(img/tile.png);
+	background-color: #ffffcc;
+}
+
+.card.trans {
+	background-color: transparent;
+}
+
+.card.slot {
+	background-color: transparent;
+}
+
+.card.slot span {
+	background-image: url(img/cards-inv/c++.png);
+}
+
+.card.hand span {
+	background-image: url(img/cards-inv/chh.png);
+}
+
+.card.hand:hover span {
+	background-image: url(img/cards-inv/c++.png);
+	cursor: pointer;
+}
+
+.card.c00c span { background-image: url(img/cards-inv/00c.png); }
+.card.c01c span { background-image: url(img/cards-inv/01c.png); }
+.card.c02c span { background-image: url(img/cards-inv/02c.png); }
+.card.c03c span { background-image: url(img/cards-inv/03c.png); }
+.card.c04c span { background-image: url(img/cards-inv/04c.png); }
+.card.c05c span { background-image: url(img/cards-inv/05c.png); }
+.card.c06c span { background-image: url(img/cards-inv/06c.png); }
+.card.c07c span { background-image: url(img/cards-inv/07c.png); }
+.card.c08c span { background-image: url(img/cards-inv/08c.png); }
+.card.c09c span { background-image: url(img/cards-inv/09c.png); }
+.card.c10c span { background-image: url(img/cards-inv/10c.png); }
+.card.c11c span { background-image: url(img/cards-inv/11c.png); }
+.card.c12c span { background-image: url(img/cards-inv/12c.png); }
+.card.c00d span { background-image: url(img/cards-inv/00d.png); }
+.card.c01d span { background-image: url(img/cards-inv/01d.png); }
+.card.c02d span { background-image: url(img/cards-inv/02d.png); }
+.card.c03d span { background-image: url(img/cards-inv/03d.png); }
+.card.c04d span { background-image: url(img/cards-inv/04d.png); }
+.card.c05d span { background-image: url(img/cards-inv/05d.png); }
+.card.c06d span { background-image: url(img/cards-inv/06d.png); }
+.card.c07d span { background-image: url(img/cards-inv/07d.png); }
+.card.c08d span { background-image: url(img/cards-inv/08d.png); }
+.card.c09d span { background-image: url(img/cards-inv/09d.png); }
+.card.c10d span { background-image: url(img/cards-inv/10d.png); }
+.card.c11d span { background-image: url(img/cards-inv/11d.png); }
+.card.c12d span { background-image: url(img/cards-inv/12d.png); }
+.card.c00h span { background-image: url(img/cards-inv/00h.png); }
+.card.c01h span { background-image: url(img/cards-inv/01h.png); }
+.card.c02h span { background-image: url(img/cards-inv/02h.png); }
+.card.c03h span { background-image: url(img/cards-inv/03h.png); }
+.card.c04h span { background-image: url(img/cards-inv/04h.png); }
+.card.c05h span { background-image: url(img/cards-inv/05h.png); }
+.card.c06h span { background-image: url(img/cards-inv/06h.png); }
+.card.c07h span { background-image: url(img/cards-inv/07h.png); }
+.card.c08h span { background-image: url(img/cards-inv/08h.png); }
+.card.c09h span { background-image: url(img/cards-inv/09h.png); }
+.card.c10h span { background-image: url(img/cards-inv/10h.png); }
+.card.c11h span { background-image: url(img/cards-inv/11h.png); }
+.card.c12h span { background-image: url(img/cards-inv/12h.png); }
+.card.c00s span { background-image: url(img/cards-inv/00s.png); }
+.card.c01s span { background-image: url(img/cards-inv/01s.png); }
+.card.c02s span { background-image: url(img/cards-inv/02s.png); }
+.card.c03s span { background-image: url(img/cards-inv/03s.png); }
+.card.c04s span { background-image: url(img/cards-inv/04s.png); }
+.card.c05s span { background-image: url(img/cards-inv/05s.png); }
+.card.c06s span { background-image: url(img/cards-inv/06s.png); }
+.card.c07s span { background-image: url(img/cards-inv/07s.png); }
+.card.c08s span { background-image: url(img/cards-inv/08s.png); }
+.card.c09s span { background-image: url(img/cards-inv/09s.png); }
+.card.c10s span { background-image: url(img/cards-inv/10s.png); }
+.card.c11s span { background-image: url(img/cards-inv/11s.png); }
+.card.c12s span { background-image: url(img/cards-inv/12s.png); }

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>Power Poker</title>
+
+  <meta name="title" content="Power Poker" />
+  <meta http-equiv="title" content="Power Poker" />
+  <meta name="DC.Title" content="Power Poker" />
+  <meta name="DC.Creator" content="Arturo Espinosa Aldama" />
+  <meta name="keywords" content="poker, solitaire, free, card, game" />
+  <meta http-equiv="keywords" content="poker, solitaire, free, card, game" />
+  <meta name="description" content="Power Poker: a solitaire in a 5x5 card grid, inspired on COMPUTE!'s Gazette 1985/11 (Issue 29) Power Poker." />
+  <meta http-equiv="description" content="Power Poker: a solitaire in a 5x5 card grid, inspired on COMPUTE!'s Gazette 1985/11 (Issue 29) Power Poker." />
+  <meta http-equiv="DC.Description" content="Power Poker: a solitaire in a 5x5 card grid, inspired on COMPUTE!'s Gazette 1985/11 (Issue 29) Power Poker." />
+ 
+  <meta name="author" content="Arturo Espinosa Aldama" />
+  <meta name="vw96.objectype" content="Homepage" />
+  <meta name="resource-type" content="Homepage" />
+  <meta name="distribution" content="all | index | follow" />
+  <meta name="robots" content="all | index | follow" />
+  <meta name="revisit" content="30 days" /> 
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="hand-style.css" />
+  <link rel="stylesheet" type="text/css" href="blink-style.css" />
+
+  <script src="scripts/powerpoker.js" type="text/javascript"></script>
+ </head>
+ <body onload="PP = new PowerPoker ()">
+  <div id="border">
+   <div id="game">
+	<div id="title"><span class="t1">Po</span><span class="t2">w</span><span>er Po</span><span class="t2">k</span><span class="t1">eR</span></div>
+	<div id="board">
+	 <div id="scorebox"><p>Score</p><div id="score"></div><p>High Score</p><div id="high"></div></div>
+	 <div id="hand"></div>
+	 <div id="controls">
+	  <div id="selector">
+	   <span id="next" class="card reverse hand"><span></span></span>
+	  </div>
+	 </div>
+	 <div id="slots"></div>
+	</div>
+	<span id="infochip" class="chip"><span></span></span>
+	<span id="handchip" class="chip"></span>
+	<div id="infowindow">
+	 <p>
+	  Place the cards on the 5x5 board and make as many points as you can
+	  from the resulting <a class="new-win" href="http://en.wikipedia.org/wiki/List_of_poker_hands">Poker hands</a>,
+	  both top-down and across. That's it!
+	 </p>
+	 <p>
+	  This game is inspired on COMPUTE!'s Gazette 1985/11 (Issue 29)
+	  Power Poker game, coded in C64 Basic. This implementation is Copyright
+	  &copy; 2008, Arturo Espinosa Aldama and is released under the
+	  <a class="new-win" href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU GPL v2</a>.
+	 </p>
+	 <p>
+	  Many thanks to <a class="new-win" href="http://en.wikipedia.org/wiki/User:Cburnett">Colin M.L. Burnett</a>
+	  for the Free <a class="new-win" href="http://commons.wikimedia.org/wiki/Category:SVG_playing_cards_2">SVG playing cards</a>.
+	 </p>
+	 <div id="scoretable"></div>
+	</div>
+   </div>
+  </div>
+ </body>
+</html>
