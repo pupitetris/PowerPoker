@@ -1,8 +1,8 @@
 /*
    This game is inspired on COMPUTE!'s Gazette 1985/11 (Issue 29)
-   Power Poker game, coded in C64 Basic. This implementation is 
-   Copyright (C) 2008, Arturo Espinosa Aldama and is released under 
-   the GNU GPL v2. You can get a copy of the license at:
+   Power Poker game, coded in C64 Basic. This implementation is
+   Copyright (C) 2008-2025, Arturo Espinosa Aldama and is released
+   under the GNU GPL v2. You can get a copy of the license at:
 
    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
