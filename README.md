@@ -94,7 +94,7 @@ on the screen also.)
 >
 > If you've never played poker, it's very easy to learn. There are 52
 > cards, divided into four sets (or suits) of 13. The suits are hearts,
-> clubs, spades, and diamonds, and each suit consists of ca rds numbered
+> clubs, spades, and diamonds, and each suit consists of cards numbered
 > 2-10 with a jack, queen, king, and ace. The object is to make one of
 > the folloWing hands (examples are in parentheses):
 > 
@@ -103,7 +103,7 @@ on the screen also.)
 > **Four of a kind**: four of the same value (2,2,2,2)
 > **Straight**: five in sequence (4,5,6,7,8)
 > **Full house**: three of a kind plus a pair (10, 10,10,4,4)
-> **Three of a kind**: three of the same va lue (9,9,9)
+> **Three of a kind**: three of the same value (9,9,9)
 > **Flush**: five of the same suit (2,K,8,A,5-all dubs)
 > **Two pair**: two groups of two, each of the same value (A,A,6,6)
 > **One pair**: two of the same value (10,10) 
