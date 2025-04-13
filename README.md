@@ -98,15 +98,15 @@ on the screen also.)
 > 2-10 with a jack, queen, king, and ace. The object is to make one of
 > the folloWing hands (examples are in parentheses):
 > 
-> **Royal flush**: 10,j,K,Q,A-all of the same suit
-> **Straight flush**: a sequence of five of the same suit (9,lO,J,Q,K-all diamonds)
-> **Four of a kind**: four of the same value (2,2,2,2)
-> **Straight**: five in sequence (4,5,6,7,8)
-> **Full house**: three of a kind plus a pair (10, 10,10,4,4)
-> **Three of a kind**: three of the same value (9,9,9)
-> **Flush**: five of the same suit (2,K,8,A,5-all dubs)
-> **Two pair**: two groups of two, each of the same value (A,A,6,6)
-> **One pair**: two of the same value (10,10) 
+> **Royal flush**: 10,j,K,Q,A-all of the same suit<br>
+> **Straight flush**: a sequence of five of the same suit (9,lO,J,Q,K-all diamonds)<br>
+> **Four of a kind**: four of the same value (2,2,2,2)<br>
+> **Straight**: five in sequence (4,5,6,7,8)<br>
+> **Full house**: three of a kind plus a pair (10, 10,10,4,4)<br>
+> **Three of a kind**: three of the same value (9,9,9)<br>
+> **Flush**: five of the same suit (2,K,8,A,5-all dubs)<br>
+> **Two pair**: two groups of two, each of the same value (A,A,6,6)<br>
+> **One pair**: two of the same value (10,10)
 
 To remember the value of each hand, you can press F1 at any time
 during the game to see the table of values. Press it again to resume
