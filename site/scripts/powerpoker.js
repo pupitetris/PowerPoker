@@ -105,15 +105,20 @@ PowerPoker.prototype.handSet = function(str) {
 }
 
 PowerPoker.prototype.slotHandsDisplay = function(status) {
-    document.styleSheets[1].disabled = !status;
-    if (status)
+    if (status) {
+	document.getElementById('game').classList.remove('hands-display-no');
 	this.BOARD_CLICK = this.slotClick;
-    else
+    } else {
+	document.getElementById('game').classList.add('hands-display-no');
 	this.BOARD_CLICK = undefined;
+    }
 }
 
 PowerPoker.prototype.blinkSet = function(status) {
-    document.styleSheets[2].disabled = !status;
+    if (status)
+	document.getElementById('game').classList.remove('card-blink-display-no');
+    else
+	document.getElementById('game').classList.add('card-blink-display-no');
 }
 
 PowerPoker.prototype.handCheck = function(hand) {
@@ -397,20 +402,14 @@ PowerPoker.prototype.handEnable = function() {
     var pp = this;
     this.HAND_CHIP.onclick = function() { pp.handDisable(); };
     this.HAND_CHIP.style.backgroundImage = 'url(img/hand_chip.png)';
-    if (document.styleSheets[1].insertRule)
-	document.styleSheets[1].insertRule(".card.slot span { background-image: url(img/cards-inv/chh.png); }", 0);
-    else if (document.styleSheets[1].addRule)
-	document.styleSheets[1].addRule(".card.slot span", "background-image: url(img/cards-inv/chh.png)", 0);
+    document.getElementById('game').classList.remove('hands-off');
 }
 
 PowerPoker.prototype.handDisable = function() {
     var pp = this;
     this.HAND_CHIP.onclick = function() { pp.handEnable(); };
     this.HAND_CHIP.style.backgroundImage = 'url(img/hand_chip_yes.png)';
-    if (document.styleSheets[1].deleteRule)
-	document.styleSheets[1].deleteRule(0);
-    else if (document.styleSheets[1].removeRule)
-	document.styleSheets[1].removeRule(0);
+    document.getElementById('game').classList.add('hands-off');
 }
 
 PowerPoker.prototype.infoClose = function() {
