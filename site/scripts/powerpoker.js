@@ -77,13 +77,13 @@ const HAND_KEYS = {
 
 class PowerPoker {
     constructor(ele_base) {
-        this.deck = [];
-        this.board_click;
+        this.deck = this.initDeck();
+        this.board_click = undefined;
 
-        this.board;
-        this.curr;
-        this.card_count;
-        this.score;
+        this.board = [];
+        this.curr = DECK_SIZE;
+        this.card_count = 0;
+        this.score = 0;
         this.high = 0;
 
         this.ele_base = ele_base;
@@ -233,7 +233,7 @@ class PowerPoker {
         this.handSet('');
     }
 
-    gameInit() {
+    async gameInit() {
         this.board = [];
         this.curr = DECK_SIZE;
 
@@ -300,7 +300,7 @@ class PowerPoker {
         let start = 0;
         let first = 0;
         while (first < BOARD_SIZE - 1) {
-            let first = start;
+            first = start;
             if (first >= HAND_SIZE)
                 first += (first - HAND_SIZE + 1) * (HAND_SIZE - 1);
             let i = first;
@@ -430,12 +430,16 @@ class PowerPoker {
         this.ele_infochip.onclick = () => this.infoClose();
     }
 
-    init() {
+    initDeck() {
+        const deck = [];
         const suits = ['c', 'd', 'h', 's'];
         for (const i in suits)
             for (let j = 0; j < SUITE_SIZE; j++)
-                this.deck[i * SUITE_SIZE + j] = i02d(j) + suits[i];
+                deck.push(i02d(j) + suits[i]);
+        return deck;
+    }
 
+    initSlots() {
         const pp = this;
         const slots = this.ele_slots;
         for (let i = 0; i < BOARD_SIZE; i++) {
@@ -447,7 +451,7 @@ class PowerPoker {
             slot.appendChild(document.createElement('span'));
             slot.slot = i;
             slot.className = 'pp-card trans';
-            slot.onclick = function() { pp.boardClick(this.slot); };
+            slot.onclick = function() { return pp.boardClick(this.slot); };
             slot.style.top = yy + 'px';
             slot.style.left = xx + 'px';
             slots.appendChild(slot);
@@ -457,6 +461,10 @@ class PowerPoker {
         fly.appendChild(document.createElement('span'));
         fly.className = 'pp-card trans pp-fly';
         slots.appendChild(fly);
+    }
+
+    async init() {
+        this.initSlots();
 
         this.ele_card_next.style.top = '150px';
         this.ele_card_next.style.left = (HAND_SIZE *
@@ -480,7 +488,7 @@ class PowerPoker {
         if (!this.high)
             this.high = 0;
         this.highSet(this.high);
-        this.gameInit();
+        await this.gameInit();
     }
 }
 
