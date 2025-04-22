@@ -204,7 +204,7 @@
     background-color: var(--pp-card-blink-bgcolor);
 }
 
-.pp-card-blink-display-no .card.blink {
+.pp-card-blink-display-no .pp-card.blink {
     background-color: var(--pp-card-bgcolor);
 }
 
