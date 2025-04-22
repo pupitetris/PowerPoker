@@ -36,19 +36,43 @@ function cmp(a, b) {
     return (a < b)? -1: (a > b)? 1: 0;
 }
 
+const CARD_WIDTH = 78;
+const CARD_HEIGHT = 97;
+const BOARD_SPACING = 10;
+const BLINK_TIMES = 12;
+const BLINK_DELAY = 100;
+const HAND_SIZE = 5;
+const SUITE_SIZE = 13;
+const DECK_SIZE = 52;
+const BOARD_SIZE = HAND_SIZE * HAND_SIZE;
+const FLY_SPEED = 10;
+
+const HANDS = [
+    { score: 400, str: 'Royal Flush' },
+    { score: 300, str: 'Straight Flush' },
+    { score: 160, str: 'Four of a Kind' },
+    { score: 120, str: 'Straight' },
+    { score: 100, str: 'Full House'},
+    { score:  60, str: 'Three of a Kind' },
+    { score:  50, str: 'Flush' },
+    { score:  30, str: 'Two Pair' },
+    { score:  10, str: 'One Pair' }
+];
+
+const HAND_KEYS = {
+    _royal: 0,
+    _strfl: 1,
+    _4ofak: 2,
+    _str:   3,
+    _full:  4,
+    _3ofak: 5,
+    _flush: 6,
+    _2pair: 7,
+    _1pair: 8
+};
+
 class PowerPoker {
     constructor() {
-        this.CARD_WIDTH = 78;
-        this.CARD_HEIGHT = 97;
-        this.BOARD_SPACING = 10;
-        this.BLINK_TIMES = 12;
-        this.BLINK_DELAY = 100;
-        this.HAND_SIZE = 5;
-        this.SUITE_SIZE = 13;
-        this.DECK_SIZE = 52;
-        this.BOARD_SIZE = this.HAND_SIZE * this.HAND_SIZE;
-        this.FLY_SPEED = 10;
-
         this.DECK = [];
         this.BOARD_CLICK;
         this.CARD_NEXT;
@@ -61,30 +85,6 @@ class PowerPoker {
         this.CARD_COUNT;
         this.SCORE;
         this.HIGH = 0;
-
-        this.HANDS = [
-            { score: 400, str: 'Royal Flush' },
-            { score: 300, str: 'Straight Flush' },
-            { score: 160, str: 'Four of a Kind' },
-            { score: 120, str: 'Straight' },
-            { score: 100, str: 'Full House'},
-            { score:  60, str: 'Three of a Kind' },
-            { score:  50, str: 'Flush' },
-            { score:  30, str: 'Two Pair' },
-            { score:  10, str: 'One Pair' }
-        ];
-
-        this.HAND_KEYS = {
-            _royal: 0,
-            _strfl: 1,
-            _4ofak: 2,
-            _str:   3,
-            _full:  4,
-            _3ofak: 5,
-            _flush: 6,
-            _2pair: 7,
-            _1pair: 8
-        };
 
         this.init();
     }
@@ -132,7 +132,7 @@ class PowerPoker {
 
         hand.sort(function(a, b) { return cmp(a.card, b.card); });
 
-        for (var i = 0; i < this.HAND_SIZE; i++) {
+        for (var i = 0; i < HAND_SIZE; i++) {
             osuit = suit;
             okind = kind;
             suit = hand[i].card.substring(2);
@@ -155,12 +155,12 @@ class PowerPoker {
         }
 
         if (straight || flush) {
-            for (var i = 0; i < this.HAND_SIZE; i++)
+            for (var i = 0; i < HAND_SIZE; i++)
                 hand[i].flag = true;
         } else {
             if (lastSame > 0)
                 same.push(lastSame);
-            same.sort(this.cmp);
+            same.sort(cmp);
         }
 
         var key;
@@ -190,7 +190,7 @@ class PowerPoker {
         }
 
         if (key) {
-            var points = this.HANDS[this.HAND_KEYS['_' + key]];
+            var points = HANDS[HAND_KEYS['_' + key]];
             this.SCORE += points.score;
             this.handSet(points.str);
             return true;
@@ -213,7 +213,7 @@ class PowerPoker {
 
     gameInit() {
         this.BOARD = [];
-        this.CURR = this.DECK_SIZE;
+        this.CURR = DECK_SIZE;
 
         this.scoreSet(this.SCORE = 0);
         this.handSet('');
@@ -246,7 +246,7 @@ class PowerPoker {
 
     nextCheck() {
         this.CARD_COUNT++;
-        if (this.CARD_COUNT == this.BOARD_SIZE)
+        if (this.CARD_COUNT == BOARD_SIZE)
             this.gameOver();
         else {
             window.setTimeout(() => { this.nextSet(); }, 200);
@@ -254,7 +254,7 @@ class PowerPoker {
     }
 
     handBlink(hand, i, func) {
-        if (i == this.BLINK_TIMES || i == 0)
+        if (i == BLINK_TIMES || i == 0)
             for (var j = 0; j < hand.length; j++) {
                 var card = hand[j];
                 if (card.flag) {
@@ -270,7 +270,7 @@ class PowerPoker {
 
         this.blinkSet((i % 2)? true: false);
         if (i) {
-            window.setTimeout(() => { this.handBlink(hand, --i, func); }, this.BLINK_DELAY);
+            window.setTimeout(() => { this.handBlink(hand, --i, func); }, BLINK_DELAY);
         } else {
             this.scoreSet(this.SCORE);
             func();
@@ -279,15 +279,15 @@ class PowerPoker {
 
     boardTurnCard(start, className, xtra) {
         var first = start;
-        if (first >= this.HAND_SIZE)
-            first += (first - this.HAND_SIZE + 1) * (this.HAND_SIZE - 1);
+        if (first >= HAND_SIZE)
+            first += (first - HAND_SIZE + 1) * (HAND_SIZE - 1);
         var i = first;
         do {
             document.getElementById('slot' + i).className = className;
-            i += this.HAND_SIZE - 1;
-        } while (Math.floor(i / this.HAND_SIZE) < this.HAND_SIZE && i % this.HAND_SIZE < this.HAND_SIZE - 1);
+            i += HAND_SIZE - 1;
+        } while (Math.floor(i / HAND_SIZE) < HAND_SIZE && i % HAND_SIZE < HAND_SIZE - 1);
 
-        if (first <  this.HAND_SIZE * this.HAND_SIZE - 1) {
+        if (first <  HAND_SIZE * HAND_SIZE - 1) {
             window.setTimeout(() => { this.boardTurnCard(start + 1, className, xtra); }, 100);
         } else if (xtra)
             window.setTimeout(xtra, 100);
@@ -299,53 +299,54 @@ class PowerPoker {
 
     boardCheckCol(col) {
         var hand = [];
-        for (var y = 0; y < this.HAND_SIZE; y++) {
-            var pos = y * this.HAND_SIZE + col;
+        for (var y = 0; y < HAND_SIZE; y++) {
+            var pos = y * HAND_SIZE + col;
             if (this.BOARD[pos])
                 hand.push({card: this.BOARD[pos], pos: pos});
         }
-
-        if (hand.length != this.HAND_SIZE || !this.handCheck(hand))
-            return false;
-        this.handBlink(hand, this.BLINK_TIMES, () => { this.nextCheck(); });
-        return true;
+        if (hand.length == HAND_SIZE &&
+            this.handCheck(hand)) {
+            this.handBlink(hand, BLINK_TIMES, () => { this.nextCheck(); });
+            return true;
+        }
+        return false;
     }
 
     boardCheckRow(row, col) {
         var hand = [];
-        for (var x = 0; x < this.HAND_SIZE; x++) {
-            var pos = row * this.HAND_SIZE + x;
+        for (var x = 0; x < HAND_SIZE; x++) {
+            var pos = row * HAND_SIZE + x;
             if (this.BOARD[pos])
                 hand.push({card: this.BOARD[pos], pos: pos});
         }
-
-        if (hand.length != this.HAND_SIZE || !this.handCheck(hand))
-            return false;
-        this.handBlink(hand,
-                       this.BLINK_TIMES,
-                       () => {
-                           if (!this.boardCheckCol(col))
-                               this.nextCheck();
-                       });
-        return true;
+        if (hand.length == HAND_SIZE &&
+            this.handCheck(hand)) {
+            this.handBlink(hand, BLINK_TIMES,
+                () => {
+                    if (!this.boardCheckCol(col))
+                        this.nextCheck();
+                });
+            return true;
+        }
+        return false;
     }
 
     boardCheck(slot) {
-        var col = slot % this.HAND_SIZE;
-        var row = Math.floor(slot / this.HAND_SIZE);
+        var col = slot % HAND_SIZE;
+        var row = Math.floor(slot / HAND_SIZE);
 
         return this.boardCheckRow(row, col) || this.boardCheckCol(col);
     }
 
     slotFly(origx, origy, destx, cos, sin, func) {
-        if (origx - destx < cos * this.FLY_SPEED * -1) {
+        if (origx - destx < cos * FLY_SPEED * -1) {
             this.CARD_FLY.style.display = 'none';
             func();
         } else {
             this.CARD_FLY.style.left = origx + 'px';
             this.CARD_FLY.style.top = origy + 'px';
-            origx += cos * this.FLY_SPEED;
-            origy += sin * this.FLY_SPEED;
+            origx += cos * FLY_SPEED;
+            origy += sin * FLY_SPEED;
 
             window.setTimeout(() => { this.slotFly(origx, origy, destx, cos, sin, func); }, 5);
         }
@@ -365,8 +366,8 @@ class PowerPoker {
         this.CARD_FLY.style.display = 'inline';
         this.CARD_NEXT.className = "card reverse";
 
-        var destx = (slot % this.HAND_SIZE) * (this.CARD_WIDTH + this.BOARD_SPACING);
-        var desty = Math.floor(slot / this.HAND_SIZE) * (this.CARD_HEIGHT + this.BOARD_SPACING);
+        var destx = (slot % HAND_SIZE) * (CARD_WIDTH + BOARD_SPACING);
+        var desty = Math.floor(slot / HAND_SIZE) * (CARD_HEIGHT + BOARD_SPACING);
         var dx = destx - 458;
         var dy = desty - 150;
         var h = Math.sqrt(dx * dx + dy * dy);
@@ -418,22 +419,23 @@ class PowerPoker {
     init() {
         var suits = ['c', 'd', 'h', 's'];
         for (var i in suits)
-            for (var j = 0; j < this.SUITE_SIZE; j++)
-                this.DECK[i * this.SUITE_SIZE + j] = i02d(j) + suits[i];
+            for (var j = 0; j < SUITE_SIZE; j++)
+                this.DECK[i * SUITE_SIZE + j] = i02d(j) + suits[i];
 
         const pp = this;
+
         var slots = document.getElementById('slots');
-        for (var i = 0; i < this.BOARD_SIZE; i++) {
-            var x = i % this.HAND_SIZE;
-            var y = Math.floor(i / this.HAND_SIZE);
-            var xx = x * (this.CARD_WIDTH + this.BOARD_SPACING);
-            var yy = y * (this.CARD_HEIGHT + this.BOARD_SPACING);
+        for (var i = 0; i < BOARD_SIZE; i++) {
+            var x = i % HAND_SIZE;
+            var y = Math.floor(i / HAND_SIZE);
+            var xx = x * (CARD_WIDTH + BOARD_SPACING);
+            var yy = y * (CARD_HEIGHT + BOARD_SPACING);
             var slot = document.createElement('span');
             slot.appendChild(document.createElement('span'));
             slot.slot = i;
             slot.id = 'slot' + i;
             slot.className = 'card trans';
-            slot.onclick = function() { pp.boardClick(this.slot); };
+            slot.onclick = function() { pp.boardClick(this.slot); }; //Still a normal function
             slot.style.top = yy + 'px';
             slot.style.left = xx + 'px';
             slots.appendChild(slot);
@@ -446,8 +448,8 @@ class PowerPoker {
 
         this.CARD_NEXT = document.getElementById('next');
         this.CARD_NEXT.style.top = '150px';
-        this.CARD_NEXT.style.left = (this.HAND_SIZE *
-            (this.CARD_WIDTH + this.BOARD_SPACING) + 112) + 'px';
+        this.CARD_NEXT.style.left = (HAND_SIZE *
+                                      (CARD_WIDTH + BOARD_SPACING) + 112) + 'px';
 
         this.INFO_CHIP = document.getElementById('infochip');
         this.INFO_CHIP.firstChild.style.display = 'none';
@@ -457,8 +459,8 @@ class PowerPoker {
         this.HAND_CHIP.onclick = () => { this.handDisable(); };
 
         var html = '<table><caption>Poker Hand Point Values</caption>';
-        for (var i = 0; this.HANDS[i]; i++)
-            html += '<tr><th>' + this.HANDS[i].str + '</th><td>' + this.HANDS[i].score + '</td></tr>';
+        for (var i = 0; HANDS[i]; i++)
+            html += '<tr><th>' + HANDS[i].str + '</th><td>' + HANDS[i].score + '</td></tr>';
         html += '</table>';
         document.getElementById('scoretable').innerHTML = html;
 
