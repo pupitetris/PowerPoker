@@ -123,16 +123,16 @@ class PowerPoker {
     }
 
     handCheck(hand) {
-        var same = [];
-        var flush = true;
-        var straight = true;
-        var suit, osuit;
-        var kind, okind;
-        var lastSame = 0;
+        const same = [];
+        let flush = true;
+        let straight = true;
+        let suit, osuit;
+        let kind, okind;
+        let lastSame = 0;
 
-        hand.sort(function(a, b) { return cmp(a.card, b.card); });
+        hand.sort((a, b) => cmp(a.card, b.card))
 
-        for (var i = 0; i < HAND_SIZE; i++) {
+        for (let i = 0; i < HAND_SIZE; i++) {
             osuit = suit;
             okind = kind;
             suit = hand[i].card.substring(2);
@@ -155,7 +155,7 @@ class PowerPoker {
         }
 
         if (straight || flush) {
-            for (var i = 0; i < HAND_SIZE; i++)
+            for (let i = 0; i < HAND_SIZE; i++)
                 hand[i].flag = true;
         } else {
             if (lastSame > 0)
@@ -163,7 +163,7 @@ class PowerPoker {
             same.sort(cmp);
         }
 
-        var key;
+        let key;
         if (straight) {
             if (flush) {
                 if (parseInt(hand[0].card.substring(0, 2)) == 0)
@@ -190,7 +190,7 @@ class PowerPoker {
         }
 
         if (key) {
-            var points = HANDS[HAND_KEYS['_' + key]];
+            const points = HANDS[HAND_KEYS['_' + key]];
             this.SCORE += points.score;
             this.handSet(points.str);
             return true;
@@ -199,9 +199,9 @@ class PowerPoker {
     }
 
     nextSet() {
-        var k = Math.floor(Math.random() * this.CURR);
+        const k = Math.floor(Math.random() * this.CURR);
         this.CURR--;
-        var tmp = this.DECK[this.CURR];
+        const tmp = this.DECK[this.CURR];
         this.DECK[this.CURR] = this.DECK[k];
         this.DECK[k] = tmp;
 
@@ -224,9 +224,9 @@ class PowerPoker {
         if (this.CARD_COUNT) {
             this.CARD_NEXT.onclick = () => {};
             this.CARD_NEXT.className = "card reverse";
-            this.boardTurn('card reverse', () => { this.boardTurn('card slot', () => { this.nextSet(); }); });
+            this.boardTurn('card reverse', () => this.boardTurn('card slot', () => this.nextSet()));
         } else {
-            this.CARD_NEXT.onclick = () => { this.nextSet(); };
+            this.CARD_NEXT.onclick = () => this.nextSet();
             this.boardTurn('card slot');
         }
 
@@ -241,7 +241,7 @@ class PowerPoker {
         }
         this.handSet('<span class="gameover">Game Over</span>');
         this.CARD_NEXT.className = "card reverse hand";
-        this.CARD_NEXT.onclick = () => { this.gameInit(); };
+        this.CARD_NEXT.onclick = () => this.gameInit();
     }
 
     nextCheck() {
@@ -249,20 +249,20 @@ class PowerPoker {
         if (this.CARD_COUNT == BOARD_SIZE)
             this.gameOver();
         else {
-            window.setTimeout(() => { this.nextSet(); }, 200);
+            window.setTimeout(() => this.nextSet(), 200);
         }
     }
 
     handBlink(hand, i, func) {
         if (i == BLINK_TIMES || i == 0)
-            for (var j = 0; j < hand.length; j++) {
-                var card = hand[j];
+            for (let j = 0; j < hand.length; j++) {
+                const card = hand[j];
                 if (card.flag) {
-                    var slot = document.getElementById('slot' + card.pos);
+                    const slot = document.getElementById('slot' + card.pos);
                     if (i)
                         slot.className += ' blink';
                     else {
-                        var c = slot.className;
+                        let c = slot.className;
                         slot.className = c.substring(0, c.indexOf(' blink'));
                     }
                 }
@@ -270,7 +270,7 @@ class PowerPoker {
 
         this.blinkSet((i % 2)? true: false);
         if (i) {
-            window.setTimeout(() => { this.handBlink(hand, --i, func); }, BLINK_DELAY);
+            window.setTimeout(() => this.handBlink(hand, --i, func), BLINK_DELAY);
         } else {
             this.scoreSet(this.SCORE);
             func();
@@ -278,44 +278,44 @@ class PowerPoker {
     }
 
     boardTurnCard(start, className, xtra) {
-        var first = start;
+        let first = start;
         if (first >= HAND_SIZE)
             first += (first - HAND_SIZE + 1) * (HAND_SIZE - 1);
-        var i = first;
+        let i = first;
         do {
             document.getElementById('slot' + i).className = className;
             i += HAND_SIZE - 1;
         } while (Math.floor(i / HAND_SIZE) < HAND_SIZE && i % HAND_SIZE < HAND_SIZE - 1);
 
         if (first <  HAND_SIZE * HAND_SIZE - 1) {
-            window.setTimeout(() => { this.boardTurnCard(start + 1, className, xtra); }, 100);
+            window.setTimeout(() => this.boardTurnCard(start + 1, className, xtra), 100);
         } else if (xtra)
             window.setTimeout(xtra, 100);
     }
 
     boardTurn(className, xtra) {
-        window.setTimeout(() => { this.boardTurnCard(0, className, xtra); }, 100);
+        window.setTimeout(() => this.boardTurnCard(0, className, xtra), 100);
     }
 
     boardCheckCol(col) {
-        var hand = [];
-        for (var y = 0; y < HAND_SIZE; y++) {
-            var pos = y * HAND_SIZE + col;
+        const hand = [];
+        for (let y = 0; y < HAND_SIZE; y++) {
+            const pos = y * HAND_SIZE + col;
             if (this.BOARD[pos])
                 hand.push({card: this.BOARD[pos], pos: pos});
         }
         if (hand.length == HAND_SIZE &&
             this.handCheck(hand)) {
-            this.handBlink(hand, BLINK_TIMES, () => { this.nextCheck(); });
+            this.handBlink(hand, BLINK_TIMES, () => this.nextCheck());
             return true;
         }
         return false;
     }
 
     boardCheckRow(row, col) {
-        var hand = [];
-        for (var x = 0; x < HAND_SIZE; x++) {
-            var pos = row * HAND_SIZE + x;
+        const hand = [];
+        for (let x = 0; x < HAND_SIZE; x++) {
+            const pos = row * HAND_SIZE + x;
             if (this.BOARD[pos])
                 hand.push({card: this.BOARD[pos], pos: pos});
         }
@@ -332,8 +332,8 @@ class PowerPoker {
     }
 
     boardCheck(slot) {
-        var col = slot % HAND_SIZE;
-        var row = Math.floor(slot / HAND_SIZE);
+        const col = slot % HAND_SIZE;
+        const row = Math.floor(slot / HAND_SIZE);
 
         return this.boardCheckRow(row, col) || this.boardCheckCol(col);
     }
@@ -348,7 +348,7 @@ class PowerPoker {
             origx += cos * FLY_SPEED;
             origy += sin * FLY_SPEED;
 
-            window.setTimeout(() => { this.slotFly(origx, origy, destx, cos, sin, func); }, 5);
+            window.setTimeout(() => this.slotFly(origx, origy, destx, cos, sin, func), 5);
         }
     }
 
@@ -366,15 +366,15 @@ class PowerPoker {
         this.CARD_FLY.style.display = 'inline';
         this.CARD_NEXT.className = "card reverse";
 
-        var destx = (slot % HAND_SIZE) * (CARD_WIDTH + BOARD_SPACING);
-        var desty = Math.floor(slot / HAND_SIZE) * (CARD_HEIGHT + BOARD_SPACING);
-        var dx = destx - 458;
-        var dy = desty - 150;
-        var h = Math.sqrt(dx * dx + dy * dy);
-        var sin = dy / h;
-        var cos = dx / h;
+        const destx = (slot % HAND_SIZE) * (CARD_WIDTH + BOARD_SPACING);
+        const desty = Math.floor(slot / HAND_SIZE) * (CARD_HEIGHT + BOARD_SPACING);
+        const dx = destx - 458;
+        const dy = desty - 150;
+        const h = Math.sqrt(dx * dx + dy * dy);
+        const sin = dy / h;
+        const cos = dx / h;
 
-        this.slotFly(458, 150, destx, cos, sin, () => { this.slotSet(slot); });
+        this.slotFly(458, 150, destx, cos, sin, () => this.slotSet(slot));
     }
 
     slotSet(slot) {
@@ -389,13 +389,13 @@ class PowerPoker {
     }
 
     handEnable() {
-        this.HAND_CHIP.onclick = () => { this.handDisable(); };
+        this.HAND_CHIP.onclick = () => this.handDisable();
         this.HAND_CHIP.style.backgroundImage = 'url(img/hand_chip.png)';
         document.getElementById('game').classList.remove('hands-off');
     }
 
     handDisable() {
-        this.HAND_CHIP.onclick = () => { this.handEnable(); };
+        this.HAND_CHIP.onclick = () => this.handEnable();
         this.HAND_CHIP.style.backgroundImage = 'url(img/hand_chip_yes.png)';
         document.getElementById('game').classList.add('hands-off');
     }
@@ -405,7 +405,7 @@ class PowerPoker {
         document.getElementById('handchip').style.display = 'inline';
         document.getElementById('board').style.display = 'block';
         this.INFO_CHIP.firstChild.style.display = 'none';
-        this.INFO_CHIP.onclick = () => { this.info(); };
+        this.INFO_CHIP.onclick = () => this.info();
     }
 
     info() {
@@ -413,24 +413,23 @@ class PowerPoker {
         document.getElementById('handchip').style.display = 'none';
         document.getElementById('infowindow').style.display = 'block';
         this.INFO_CHIP.firstChild.style.display = 'inline';
-        this.INFO_CHIP.onclick = () => { this.infoClose(); };
+        this.INFO_CHIP.onclick = () => this.infoClose();
     }
 
     init() {
-        var suits = ['c', 'd', 'h', 's'];
-        for (var i in suits)
-            for (var j = 0; j < SUITE_SIZE; j++)
+        const suits = ['c', 'd', 'h', 's'];
+        for (const i in suits)
+            for (let j = 0; j < SUITE_SIZE; j++)
                 this.DECK[i * SUITE_SIZE + j] = i02d(j) + suits[i];
 
         const pp = this;
-
-        var slots = document.getElementById('slots');
-        for (var i = 0; i < BOARD_SIZE; i++) {
-            var x = i % HAND_SIZE;
-            var y = Math.floor(i / HAND_SIZE);
-            var xx = x * (CARD_WIDTH + BOARD_SPACING);
-            var yy = y * (CARD_HEIGHT + BOARD_SPACING);
-            var slot = document.createElement('span');
+        const slots = document.getElementById('slots');
+        for (let i = 0; i < BOARD_SIZE; i++) {
+            const x = i % HAND_SIZE;
+            const y = Math.floor(i / HAND_SIZE);
+            const xx = x * (CARD_WIDTH + BOARD_SPACING);
+            const yy = y * (CARD_HEIGHT + BOARD_SPACING);
+            const slot = document.createElement('span');
             slot.appendChild(document.createElement('span'));
             slot.slot = i;
             slot.id = 'slot' + i;
@@ -440,7 +439,7 @@ class PowerPoker {
             slot.style.left = xx + 'px';
             slots.appendChild(slot);
         }
-        var fly = document.createElement('span');
+        const fly = document.createElement('span');
         fly.appendChild(document.createElement('span'));
         fly.id = 'fly';
         fly.className = 'card trans';
@@ -449,24 +448,24 @@ class PowerPoker {
         this.CARD_NEXT = document.getElementById('next');
         this.CARD_NEXT.style.top = '150px';
         this.CARD_NEXT.style.left = (HAND_SIZE *
-                                      (CARD_WIDTH + BOARD_SPACING) + 112) + 'px';
+            (CARD_WIDTH + BOARD_SPACING) + 112) + 'px';
 
         this.INFO_CHIP = document.getElementById('infochip');
         this.INFO_CHIP.firstChild.style.display = 'none';
-        this.INFO_CHIP.onclick = () => { this.info(); };
+        this.INFO_CHIP.onclick = () => this.info();
 
         this.HAND_CHIP = document.getElementById('handchip');
-        this.HAND_CHIP.onclick = () => { this.handDisable(); };
+        this.HAND_CHIP.onclick = () => this.handDisable();
 
-        var html = '<table><caption>Poker Hand Point Values</caption>';
-        for (var i = 0; HANDS[i]; i++)
+        let html = '<table><caption>Poker Hand Point Values</caption>';
+        for (let i = 0; HANDS[i]; i++)
             html += '<tr><th>' + HANDS[i].str + '</th><td>' + HANDS[i].score + '</td></tr>';
         html += '</table>';
         document.getElementById('scoretable').innerHTML = html;
 
-        var links = document.getElementsByTagName('a');
-        for (var i = 0; i < links.length; i++) {
-            var link = links[i];
+        const links = document.getElementsByTagName('a');
+        for (let i = 0; i < links.length; i++) {
+            const link = links[i];
             if (link.target == "") {
                 if (link.className.indexOf('new-win') != -1) {
                     link.target = '_blank';
