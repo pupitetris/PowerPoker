@@ -1,38 +1,68 @@
-body {
-    background-color: black;
+.pp {
+    --pp-bgcolor: black;
+    --pp-color: #ffffc0;
+    --pp-link-color: #0f0;
+    --pp-border-bgcolor: red;
+    --pp-game-bgcolor: green;
+    --pp-title-color: #c0c000;
+    --pp-gameover-color: yellow;
+    --pp-scoretable-color: #c0c000;
+    --pp-scoretable-th-color: white;
+    --pp-card-bgcolor: #ffffc0;
+    --pp-card-blink-bgcolor: yellow;
+    --pp-card-trans-bgcolor: transparent;
+    --pp-card-slot-bgcolor: transparent;
+    --pp-card-slot-hands-off-bgcolor: #b0b000;
+
+    --pp-main-font: serif;
+    --pp-main-font-size: 22px;
+
+    --pp-border-texture: url(img/felt_red.png);
+    --pp-game-texture: url(img/felt.png);
+    --pp-infochip-image: url(img/info.png);
+    --pp-infochip-hand-image: url(img/hand.png);
+    --pp-handchip-image: url(img/hand_chip.png);
+    --pp-handchip-yes-image: url(img/hand_chip_yes.png);
+    --pp-card-slot-image: url(img/cards-inv/chh.png);
+    --pp-card-slot-hands-off-image: url(img/cards-inv/c++.png);
+    --pp-card-hand-image: var(--pp-card-slot-image);
+    --pp-card-hand-hover-image: var(--pp-card-slot-hands-off-image);
+    --pp-card-reverse-image: url(img/tile.png);
+
+    color: var(--pp-color);
+    background-color: var(--pp-bgcolor);
+    font-family: var(--pp-main-font);
+    font-size: var(--pp-main-font-size);
     position: relative;
     margin: 0;
-    font-family: serif;
-    font-size: 22px;
-    color: #ffffc0;
 }
 
-a {
-    color: #00ff00;
+.pp a {
+    color: var(--pp-link-color);
     font-weight: bold;
 }
 
-#border {
-    background-image: url(img/felt_red.png);
-    background-color: red;
+.pp-border {
+    background-image: var(--pp-border-texture);
+    background-color: var(--pp-border-bgcolor);
     width: 750px;
     height: 645px;
     margin: auto;
 }
 
-#game {
-    background-image: url(img/felt.png);
-    background-color: green;
+.pp-game {
+    background-image: var(--pp-game-texture);
+    background-color: var(--pp-game-bgcolor);
     width: 700px;
     height: 620px;
     margin: auto;
     position: relative;
 }
 
-#title {
+.pp-title {
+    color: var(--pp-title-color);
     border-bottom: 2px solid;
     font-size: 32px;
-    color: #c0c000;
     font-variant: small-caps;
     line-height: 20px;
     text-align: center;
@@ -41,32 +71,32 @@ a {
     padding-top: 10px;
 }
 
-#title .t1 {
+.pp-title .t1 {
     font-size: 150%;
 }
 
-#title .t2 {
+.pp-title .t2 {
     font-size: 125%;
 }
 
-#board {
+.pp-board {
     position: relative;
     top: 20px;
     margin: auto;
     width: 618px;
 }
 
-#slots {
+.pp-slots {
     position: relative;
     width: 430px;
     margin: auto;
 }
 
-#fly {
+.pp-fly {
     display: none;
 }
 
-#scorebox {
+.pp-scorebox {
     position: absolute;
     top: 353px;
     left: 525px;
@@ -74,12 +104,12 @@ a {
     width: 134px;
 }
 
-#scorebox p {
+.pp-scorebox p {
     margin-top: 1em;
     margin-bottom: 0px;
 }
 
-#hand {
+.pp-hand {
     position: absolute;
     top: 65px;
     left: 530px;
@@ -87,12 +117,12 @@ a {
     text-align: center;
 }
 
-.gameover {
+.pp-gameover {
+    color: var(--pp-gameover-color);
     text-decoration: blink;
-    color: yellow;
 }
 
-.chip {
+.pp-chip {
     width: 74px;
     height: 74px;
     position: absolute;
@@ -100,31 +130,31 @@ a {
     cursor: pointer;
 }
 
-#infochip {
+.pp-infochip {
+    background-image: var(--pp-infochip-image);
     top: 235px;
-    background-image: url(img/info.png);
 }
 
-#infochip span {
+.pp-infochip span {
+    background-image: var(--pp-infochip-hand-image);
     width: 23px;
     height: 29px;
-    background-image: url(img/hand.png);
     left: 23px;
     top: 19px;
     position: absolute;
     display: none;
 }
 
-#infochip:hover span {
+.pp-infochip:hover span {
     background-image: none;
 }
 
-#handchip {
+.pp-handchip {
+    background-image: var(--pp-handchip-image);
     top: 332px;
-    background-image: url(img/hand_chip.png);
 }
 
-#infowindow {
+.pp-infowindow {
     position: relative;
     width: 430px;
     top: 10px;
@@ -134,142 +164,142 @@ a {
     display: none;
 }
 
-#infowindow p {
+.pp-infowindow p {
     text-align: justify;
     text-indent: 1.5em;
 }
 
-#scoretable table,caption {
+.pp-scoretable table,caption {
     margin: auto;
 }
 
-#scoretable caption {
+.pp-scoretable caption {
+    color: var(--pp-scoretable-color);
     padding-bottom: 1em;
     font-size: 21px;
-    color: #c0c000;
 }
 
-#scoretable td,th {
+.pp-scoretable td,th {
     border-bottom: 1px dotted black;
 }
 
-#scoretable th {
+.pp-scoretable th {
+    color: var(--pp-scoretable-th-color);
     text-align: left;
     width: 11em;
-    color: white;
 }
 
-#scoretable td {
+.pp-scoretable td {
     text-align: right;
 }
 
-.card {
-    background-color: #ffffc0;
+.pp-card {
+    background-color: var(--pp-card-bgcolor);
     position: absolute;
     width: 78px;
     height: 97px;
 }
 
-.card.blink {
-    background-color: yellow;
+.pp-card.blink {
+    background-color: var(--pp-card-blink-bgcolor);
 }
 
-.card-blink-display-no .card.blink {
-    background-color: #ffffc0;
+.pp-card-blink-display-no .card.blink {
+    background-color: var(--pp-card-bgcolor);
 }
 
-.card span {
+.pp-card span {
     width: 78px;
     height: 97px;
     position: absolute;
 }
 
-.card.reverse {
-    background-image: url(img/tile.png);
-    background-color: #ffffcc;
+.pp-card.reverse {
+    background-color: var(--pp-card-bgcolor);
+    background-image: var(--pp-card-reverse-image);
 }
 
-.card.trans {
-    background-color: transparent;
+.pp-card.trans {
+    background-color: var(--pp-card-trans-bgcolor);
 }
 
-.card.slot {
-    background-color: transparent;
+.pp-card.slot {
+    background-color: var(--pp-card-slot-bgcolor);
 }
 
-.card.slot span {
-    background-image: url(img/cards-inv/chh.png);
+.pp-card.slot span {
+    background-image: var(--pp-card-slot-image);
 }
 
-.hands-off .card.slot span, .hands-display-no .card.slot span {
-    background-image: url(img/cards-inv/c++.png);
+.hands-off .pp-card.slot span, .hands-display-no .pp-card.slot span {
+    background-image: var(--pp-card-slot-hands-off-image);
 }
 
-.card.slot:hover span {
-    background-image: url(img/cards-inv/c++.png);
-    background-color: #b0b000;
+.pp-card.slot:hover span {
+    background-image: var(--pp-card-slot-hands-off-image);
+    background-color: var(--pp-card-slot-hands-off-bgcolor);
     opacity: 0.5;
     cursor: pointer;
 }
 
-.card.hand span {
-    background-image: url(img/cards-inv/chh.png);
+.pp-card.hand span {
+    background-image: var(--pp-card-hand-image);
 }
 
-.card.hand:hover span {
-    background-image: url(img/cards-inv/c++.png);
+.pp-card.hand:hover span {
+    background-image: var(--pp-card-hand-hover-image);
     cursor: pointer;
 }
 
-.card.c00c span { background-image: url(img/cards-inv/00c.png); }
-.card.c01c span { background-image: url(img/cards-inv/01c.png); }
-.card.c02c span { background-image: url(img/cards-inv/02c.png); }
-.card.c03c span { background-image: url(img/cards-inv/03c.png); }
-.card.c04c span { background-image: url(img/cards-inv/04c.png); }
-.card.c05c span { background-image: url(img/cards-inv/05c.png); }
-.card.c06c span { background-image: url(img/cards-inv/06c.png); }
-.card.c07c span { background-image: url(img/cards-inv/07c.png); }
-.card.c08c span { background-image: url(img/cards-inv/08c.png); }
-.card.c09c span { background-image: url(img/cards-inv/09c.png); }
-.card.c10c span { background-image: url(img/cards-inv/10c.png); }
-.card.c11c span { background-image: url(img/cards-inv/11c.png); }
-.card.c12c span { background-image: url(img/cards-inv/12c.png); }
-.card.c00d span { background-image: url(img/cards-inv/00d.png); }
-.card.c01d span { background-image: url(img/cards-inv/01d.png); }
-.card.c02d span { background-image: url(img/cards-inv/02d.png); }
-.card.c03d span { background-image: url(img/cards-inv/03d.png); }
-.card.c04d span { background-image: url(img/cards-inv/04d.png); }
-.card.c05d span { background-image: url(img/cards-inv/05d.png); }
-.card.c06d span { background-image: url(img/cards-inv/06d.png); }
-.card.c07d span { background-image: url(img/cards-inv/07d.png); }
-.card.c08d span { background-image: url(img/cards-inv/08d.png); }
-.card.c09d span { background-image: url(img/cards-inv/09d.png); }
-.card.c10d span { background-image: url(img/cards-inv/10d.png); }
-.card.c11d span { background-image: url(img/cards-inv/11d.png); }
-.card.c12d span { background-image: url(img/cards-inv/12d.png); }
-.card.c00h span { background-image: url(img/cards-inv/00h.png); }
-.card.c01h span { background-image: url(img/cards-inv/01h.png); }
-.card.c02h span { background-image: url(img/cards-inv/02h.png); }
-.card.c03h span { background-image: url(img/cards-inv/03h.png); }
-.card.c04h span { background-image: url(img/cards-inv/04h.png); }
-.card.c05h span { background-image: url(img/cards-inv/05h.png); }
-.card.c06h span { background-image: url(img/cards-inv/06h.png); }
-.card.c07h span { background-image: url(img/cards-inv/07h.png); }
-.card.c08h span { background-image: url(img/cards-inv/08h.png); }
-.card.c09h span { background-image: url(img/cards-inv/09h.png); }
-.card.c10h span { background-image: url(img/cards-inv/10h.png); }
-.card.c11h span { background-image: url(img/cards-inv/11h.png); }
-.card.c12h span { background-image: url(img/cards-inv/12h.png); }
-.card.c00s span { background-image: url(img/cards-inv/00s.png); }
-.card.c01s span { background-image: url(img/cards-inv/01s.png); }
-.card.c02s span { background-image: url(img/cards-inv/02s.png); }
-.card.c03s span { background-image: url(img/cards-inv/03s.png); }
-.card.c04s span { background-image: url(img/cards-inv/04s.png); }
-.card.c05s span { background-image: url(img/cards-inv/05s.png); }
-.card.c06s span { background-image: url(img/cards-inv/06s.png); }
-.card.c07s span { background-image: url(img/cards-inv/07s.png); }
-.card.c08s span { background-image: url(img/cards-inv/08s.png); }
-.card.c09s span { background-image: url(img/cards-inv/09s.png); }
-.card.c10s span { background-image: url(img/cards-inv/10s.png); }
-.card.c11s span { background-image: url(img/cards-inv/11s.png); }
-.card.c12s span { background-image: url(img/cards-inv/12s.png); }
+.pp-card.c00c span { background-image: url(img/cards-inv/00c.png); }
+.pp-card.c01c span { background-image: url(img/cards-inv/01c.png); }
+.pp-card.c02c span { background-image: url(img/cards-inv/02c.png); }
+.pp-card.c03c span { background-image: url(img/cards-inv/03c.png); }
+.pp-card.c04c span { background-image: url(img/cards-inv/04c.png); }
+.pp-card.c05c span { background-image: url(img/cards-inv/05c.png); }
+.pp-card.c06c span { background-image: url(img/cards-inv/06c.png); }
+.pp-card.c07c span { background-image: url(img/cards-inv/07c.png); }
+.pp-card.c08c span { background-image: url(img/cards-inv/08c.png); }
+.pp-card.c09c span { background-image: url(img/cards-inv/09c.png); }
+.pp-card.c10c span { background-image: url(img/cards-inv/10c.png); }
+.pp-card.c11c span { background-image: url(img/cards-inv/11c.png); }
+.pp-card.c12c span { background-image: url(img/cards-inv/12c.png); }
+.pp-card.c00d span { background-image: url(img/cards-inv/00d.png); }
+.pp-card.c01d span { background-image: url(img/cards-inv/01d.png); }
+.pp-card.c02d span { background-image: url(img/cards-inv/02d.png); }
+.pp-card.c03d span { background-image: url(img/cards-inv/03d.png); }
+.pp-card.c04d span { background-image: url(img/cards-inv/04d.png); }
+.pp-card.c05d span { background-image: url(img/cards-inv/05d.png); }
+.pp-card.c06d span { background-image: url(img/cards-inv/06d.png); }
+.pp-card.c07d span { background-image: url(img/cards-inv/07d.png); }
+.pp-card.c08d span { background-image: url(img/cards-inv/08d.png); }
+.pp-card.c09d span { background-image: url(img/cards-inv/09d.png); }
+.pp-card.c10d span { background-image: url(img/cards-inv/10d.png); }
+.pp-card.c11d span { background-image: url(img/cards-inv/11d.png); }
+.pp-card.c12d span { background-image: url(img/cards-inv/12d.png); }
+.pp-card.c00h span { background-image: url(img/cards-inv/00h.png); }
+.pp-card.c01h span { background-image: url(img/cards-inv/01h.png); }
+.pp-card.c02h span { background-image: url(img/cards-inv/02h.png); }
+.pp-card.c03h span { background-image: url(img/cards-inv/03h.png); }
+.pp-card.c04h span { background-image: url(img/cards-inv/04h.png); }
+.pp-card.c05h span { background-image: url(img/cards-inv/05h.png); }
+.pp-card.c06h span { background-image: url(img/cards-inv/06h.png); }
+.pp-card.c07h span { background-image: url(img/cards-inv/07h.png); }
+.pp-card.c08h span { background-image: url(img/cards-inv/08h.png); }
+.pp-card.c09h span { background-image: url(img/cards-inv/09h.png); }
+.pp-card.c10h span { background-image: url(img/cards-inv/10h.png); }
+.pp-card.c11h span { background-image: url(img/cards-inv/11h.png); }
+.pp-card.c12h span { background-image: url(img/cards-inv/12h.png); }
+.pp-card.c00s span { background-image: url(img/cards-inv/00s.png); }
+.pp-card.c01s span { background-image: url(img/cards-inv/01s.png); }
+.pp-card.c02s span { background-image: url(img/cards-inv/02s.png); }
+.pp-card.c03s span { background-image: url(img/cards-inv/03s.png); }
+.pp-card.c04s span { background-image: url(img/cards-inv/04s.png); }
+.pp-card.c05s span { background-image: url(img/cards-inv/05s.png); }
+.pp-card.c06s span { background-image: url(img/cards-inv/06s.png); }
+.pp-card.c07s span { background-image: url(img/cards-inv/07s.png); }
+.pp-card.c08s span { background-image: url(img/cards-inv/08s.png); }
+.pp-card.c09s span { background-image: url(img/cards-inv/09s.png); }
+.pp-card.c10s span { background-image: url(img/cards-inv/10s.png); }
+.pp-card.c11s span { background-image: url(img/cards-inv/11s.png); }
+.pp-card.c12s span { background-image: url(img/cards-inv/12s.png); }

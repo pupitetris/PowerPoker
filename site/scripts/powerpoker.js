@@ -72,7 +72,7 @@ const HAND_KEYS = {
 };
 
 class PowerPoker {
-    constructor() {
+    constructor(ele_base) {
         this.deck = [];
         this.board_click;
 
@@ -82,31 +82,36 @@ class PowerPoker {
         this.score;
         this.high = 0;
 
-        this.ele_score = document.getElementById('score');
-        this.ele_high_score = document.getElementById('high');
-        this.ele_hand = document.getElementById('hand');
-        this.ele_game = document.getElementById('game');
-        this.ele_card_next = document.getElementById('next');
-        this.ele_info_chip = document.getElementById('infochip');
-        this.ele_hand_chip = document.getElementById('handchip');
-        this.ele_infowindow = document.getElementById('infowindow');
-        this.ele_board = document.getElementById('board');
-        this.ele_slots = document.getElementById('slots');
-        this.ele_scoretable = document.getElementById('scoretable');
+        this.ele_base = ele_base;
+        this.ele_game = this.elementGet('.pp-game');
+        this.ele_score = this.elementGet('.pp-score');
+        this.ele_high_score = this.elementGet('.pp-high');
+        this.ele_hand = this.elementGet('.pp-hand');
+        this.ele_card_next = this.elementGet('.pp-next');
+        this.ele_infochip = this.elementGet('.pp-infochip');
+        this.ele_handchip = this.elementGet('.pp-handchip');
+        this.ele_infowindow = this.elementGet('.pp-infowindow');
+        this.ele_board = this.elementGet('.pp-board');
+        this.ele_slots = this.elementGet('.pp-slots');
+        this.ele_scoretable = this.elementGet('.pp-scoretable');
 
         this.init();
     }
 
+    elementGet(selector) {
+        return this.ele_base.querySelector(selector);
+    }
+
     linkElementsGet() {
-        return document.getElementsByTagName('a');
+        return this.ele_base.querySelectorAll('a');
     }
 
     slotElementGet(slot_pos) {
-        return document.getElementById('slot' + slot_pos);
+        return this.elementGet(`[slot="${slot_pos}"]`);
     }
 
     cardSet(node, card) {
-        node.className = 'card c' + card;
+        node.className = 'pp-card c' + card;
     }
 
     scoreSet(score) {
@@ -133,9 +138,9 @@ class PowerPoker {
 
     blinkSet(status) {
         if (status)
-            this.ele_game.classList.remove('card-blink-display-no');
+            this.ele_game.classList.remove('pp-card-blink-display-no');
         else
-            this.ele_game.classList.add('card-blink-display-no');
+            this.ele_game.classList.add('pp-card-blink-display-no');
     }
 
     handCheck(hand) {
@@ -239,11 +244,11 @@ class PowerPoker {
 
         if (this.card_count) {
             this.ele_card_next.onclick = () => {};
-            this.ele_card_next.className = 'card reverse';
-            this.boardTurn('card reverse', () => this.boardTurn('card slot', () => this.nextSet()));
+            this.ele_card_next.className = 'pp-card reverse';
+            this.boardTurn('pp-card reverse', () => this.boardTurn('pp-card slot', () => this.nextSet()));
         } else {
             this.ele_card_next.onclick = () => this.nextSet();
-            this.boardTurn('card slot');
+            this.boardTurn('pp-card slot');
         }
 
         this.card_count = 0;
@@ -255,8 +260,8 @@ class PowerPoker {
             cookieSet('this.high', this.high, 99999);
             this.highSet(this.high);
         }
-        this.handSet('<span class="gameover">Game Over</span>');
-        this.ele_card_next.className = 'card reverse hand';
+        this.handSet('<span class="pp-gameover">Game Over</span>');
+        this.ele_card_next.className = 'pp-card reverse hand';
         this.ele_card_next.onclick = () => this.gameInit();
     }
 
@@ -276,11 +281,9 @@ class PowerPoker {
                 if (card.flag) {
                     const slot = this.slotElementGet(card.pos);
                     if (i)
-                        slot.className += ' blink';
-                    else {
-                        let c = slot.className;
-                        slot.className = c.substring(0, c.indexOf(' blink'));
-                    }
+                        slot.classList.add('blink');
+                    else
+                        slot.classList.remove('blink');
                 }
             }
 
@@ -379,7 +382,7 @@ class PowerPoker {
         this.ele_card_fly.style.left = '458px';
         this.ele_card_fly.style.top = '150px';
         this.ele_card_fly.style.display = 'inline';
-        this.ele_card_next.className = 'card reverse';
+        this.ele_card_next.className = 'pp-card reverse';
 
         const destx = (slot % HAND_SIZE) * (CARD_WIDTH + BOARD_SPACING);
         const desty = Math.floor(slot / HAND_SIZE) * (CARD_HEIGHT + BOARD_SPACING);
@@ -404,31 +407,31 @@ class PowerPoker {
     }
 
     handEnable() {
-        this.ele_hand_chip.onclick = () => this.handDisable();
-        this.ele_hand_chip.style.backgroundImage = 'url(img/hand_chip.png)';
+        this.ele_handchip.onclick = () => this.handDisable();
+        this.ele_handchip.style.backgroundImage = 'var(--pp-handchip-image)';
         this.ele_game.classList.remove('hands-off');
     }
 
     handDisable() {
-        this.ele_hand_chip.onclick = () => this.handEnable();
-        this.ele_hand_chip.style.backgroundImage = 'url(img/hand_chip_yes.png)';
+        this.ele_handchip.onclick = () => this.handEnable();
+        this.ele_handchip.style.backgroundImage = 'var(--pp-handchip-yes-image)';
         this.ele_game.classList.add('hands-off');
     }
 
     infoClose() {
         this.ele_infowindow.style.display = 'none';
-        this.ele_hand_chip.style.display = 'inline';
+        this.ele_handchip.style.display = 'inline';
         this.ele_board.style.display = 'block';
-        this.ele_info_chip.firstChild.style.display = 'none';
-        this.ele_info_chip.onclick = () => this.info();
+        this.ele_infochip.firstChild.style.display = 'none';
+        this.ele_infochip.onclick = () => this.info();
     }
 
     info() {
         this.ele_board.style.display = 'none';
-        this.ele_hand_chip.style.display = 'none';
+        this.ele_handchip.style.display = 'none';
         this.ele_infowindow.style.display = 'block';
-        this.ele_info_chip.firstChild.style.display = 'inline';
-        this.ele_info_chip.onclick = () => this.infoClose();
+        this.ele_infochip.firstChild.style.display = 'inline';
+        this.ele_infochip.onclick = () => this.infoClose();
     }
 
     init() {
@@ -447,9 +450,8 @@ class PowerPoker {
             const slot = document.createElement('span');
             slot.appendChild(document.createElement('span'));
             slot.slot = i;
-            slot.id = 'slot' + i;
-            slot.className = 'card trans';
-            slot.onclick = function() { pp.boardClick(this.slot); }; //Still a normal function
+            slot.className = 'pp-card trans';
+            slot.onclick = function() { pp.boardClick(this.slot); };
             slot.style.top = yy + 'px';
             slot.style.left = xx + 'px';
             slots.appendChild(slot);
@@ -457,17 +459,16 @@ class PowerPoker {
         const fly = document.createElement('span');
         this.ele_card_fly = fly;
         fly.appendChild(document.createElement('span'));
-        fly.id = 'fly';
-        fly.className = 'card trans';
+        fly.className = 'pp-card trans pp-fly';
         slots.appendChild(fly);
 
         this.ele_card_next.style.top = '150px';
         this.ele_card_next.style.left = (HAND_SIZE *
             (CARD_WIDTH + BOARD_SPACING) + 112) + 'px';
 
-        this.ele_info_chip.firstChild.style.display = 'none';
-        this.ele_info_chip.onclick = () => this.info();
-        this.ele_hand_chip.onclick = () => this.handDisable();
+        this.ele_infochip.firstChild.style.display = 'none';
+        this.ele_infochip.onclick = () => this.info();
+        this.ele_handchip.onclick = () => this.handDisable();
 
         let html = '<table><caption>Poker Hand Point Values</caption>';
         for (let i = 0; HANDS[i]; i++)
@@ -478,11 +479,8 @@ class PowerPoker {
         const links = this.linkElementsGet();
         for (let i = 0; i < links.length; i++) {
             const link = links[i];
-            if (link.target == '') {
-                if (link.className.indexOf('new-win') != -1) {
-                    link.target = '_blank';
-                }
-            }
+            if (link.target == '' && link.classList.contains('new-win'))
+                link.target = '_blank';
         }
 
         this.high = cookieGet('this.high');
@@ -494,5 +492,5 @@ class PowerPoker {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    new PowerPoker();
+    new PowerPoker(document.querySelector('.pp'));
 });
