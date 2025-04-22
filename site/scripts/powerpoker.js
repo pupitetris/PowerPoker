@@ -36,6 +36,10 @@ function cmp(a, b) {
     return (a < b)? -1: (a > b)? 1: 0;
 }
 
+async function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const CARD_WIDTH = 78;
 const CARD_HEIGHT = 97;
 const BOARD_SPACING = 10;
@@ -144,6 +148,9 @@ class PowerPoker {
     }
 
     handCheck(hand) {
+        if (hand.length < HAND_SIZE)
+            return undefined;
+
         const same = [];
         let flush = true;
         let straight = true;
@@ -210,13 +217,7 @@ class PowerPoker {
             }
         }
 
-        if (key) {
-            const points = HANDS[HAND_KEYS[key]];
-            this.score += points.score;
-            this.handSet(points.str);
-            return true;
-        }
-        return false;
+        return key;
     }
 
     nextSet() {
@@ -245,10 +246,12 @@ class PowerPoker {
         if (this.card_count) {
             this.ele_card_next.onclick = () => {};
             this.ele_card_next.className = 'pp-card reverse';
-            this.boardTurn('pp-card reverse', () => this.boardTurn('pp-card slot', () => this.nextSet()));
+            await this.boardTurn('pp-card reverse');
+            await this.boardTurn('pp-card slot');
+            this.nextSet();
         } else {
             this.ele_card_next.onclick = () => this.nextSet();
-            this.boardTurn('pp-card slot');
+            await this.boardTurn('pp-card slot');
         }
 
         this.card_count = 0;
@@ -265,53 +268,49 @@ class PowerPoker {
         this.ele_card_next.onclick = () => this.gameInit();
     }
 
-    nextCheck() {
+    async nextCheck() {
         this.card_count++;
         if (this.card_count == BOARD_SIZE)
             this.gameOver();
         else {
-            window.setTimeout(() => this.nextSet(), 200);
+            await wait(200);
+            this.nextSet();
         }
     }
 
-    handBlink(hand, i, func) {
-        if (i == BLINK_TIMES || i == 0)
-            for (const item of hand)
-                if (item.blink) {
-                    const slot = this.slotElementGet(item.pos);
-                    if (i)
-                        slot.classList.add('blink');
-                    else
-                        slot.classList.remove('blink');
-                }
+    async handBlink(hand) {
+        const slots = [];
+        for (const item of hand)
+            if (item.blink) {
+                const slot = this.slotElementGet(item.pos);
+                slots.push(slot);
+                slot.classList.add('blink');
+            }
 
-        this.blinkSet((i % 2)? true: false);
-        if (i) {
-            window.setTimeout(() => this.handBlink(hand, --i, func), BLINK_DELAY);
-        } else {
-            this.scoreSet(this.score);
-            func();
+        for (let i = 0; i < BLINK_TIMES; i++) {
+            this.blinkSet((i % 2)? true: false);
+            await wait(BLINK_DELAY);
         }
+
+        for (const slot of slots)
+            slot.classList.remove('blink');
     }
 
-    boardTurnCard(start, className, xtra) {
-        let first = start;
-        if (first >= HAND_SIZE)
-            first += (first - HAND_SIZE + 1) * (HAND_SIZE - 1);
-        let i = first;
-        do {
-            this.slotElementGet(i).className = className;
-            i += HAND_SIZE - 1;
-        } while (Math.floor(i / HAND_SIZE) < HAND_SIZE && i % HAND_SIZE < HAND_SIZE - 1);
-
-        if (first <  HAND_SIZE * HAND_SIZE - 1) {
-            window.setTimeout(() => this.boardTurnCard(start + 1, className, xtra), 100);
-        } else if (xtra)
-            window.setTimeout(xtra, 100);
-    }
-
-    boardTurn(className, xtra) {
-        window.setTimeout(() => this.boardTurnCard(0, className, xtra), 100);
+    async boardTurn(className) {
+        let start = 0;
+        let first = 0;
+        while (first < BOARD_SIZE - 1) {
+            let first = start;
+            if (first >= HAND_SIZE)
+                first += (first - HAND_SIZE + 1) * (HAND_SIZE - 1);
+            let i = first;
+            do {
+                this.slotElementGet(i).className = className;
+                i += HAND_SIZE - 1;
+            } while (Math.floor(i / HAND_SIZE) < HAND_SIZE && i % HAND_SIZE < HAND_SIZE - 1);
+            start ++;
+            await wait(100);
+        }
     }
 
     handAdd(hand, x, y) {
@@ -320,58 +319,55 @@ class PowerPoker {
             hand.push({ card: this.board[pos], pos: pos, blink: false });
     }
 
-    boardCheckCol(col) {
+    async boardCheckHand(hand) {
+        const key = this.handCheck(hand);
+        if (key) {
+            const points = HANDS[HAND_KEYS[key]];
+            this.score += points.score;
+            this.handSet(points.str);
+            await this.handBlink(hand, BLINK_TIMES);
+            this.scoreSet(this.score);
+        }
+    }
+
+    async boardCheckCol(col) {
         const hand = [];
         for (let y = 0; y < HAND_SIZE; y++)
             this.handAdd(hand, col, y);
-
-        if (hand.length == HAND_SIZE &&
-            this.handCheck(hand)) {
-            this.handBlink(hand, BLINK_TIMES, () => this.nextCheck());
-            return true;
-        }
-        return false;
+        await this.boardCheckHand(hand);
     }
 
-    boardCheckRow(row, col) {
+    async boardCheckRow(row) {
         const hand = [];
         for (let x = 0; x < HAND_SIZE; x++)
             this.handAdd(hand, x, row);
-
-        if (hand.length == HAND_SIZE &&
-            this.handCheck(hand)) {
-            this.handBlink(hand, BLINK_TIMES,
-                () => {
-                    if (!this.boardCheckCol(col))
-                        this.nextCheck();
-                });
-            return true;
-        }
-        return false;
+        await this.boardCheckHand(hand);
     }
 
-    boardCheck(slot) {
-        const col = slot % HAND_SIZE;
+    async boardCheck(slot) {
         const row = Math.floor(slot / HAND_SIZE);
+        const col = slot % HAND_SIZE;
 
-        return this.boardCheckRow(row, col) || this.boardCheckCol(col);
+        await this.boardCheckRow(row);
+        await this.boardCheckCol(col);
+        await this.nextCheck();
     }
 
-    slotFly(origx, origy, destx, cos, sin, func) {
+    async slotFly(origx, origy, destx, cos, sin) {
         if (origx - destx < cos * FLY_SPEED * -1) {
             this.ele_card_fly.style.display = 'none';
-            func();
         } else {
             this.ele_card_fly.style.left = origx + 'px';
             this.ele_card_fly.style.top = origy + 'px';
             origx += cos * FLY_SPEED;
             origy += sin * FLY_SPEED;
 
-            window.setTimeout(() => this.slotFly(origx, origy, destx, cos, sin, func), 5);
+            await wait(5);
+            await this.slotFly(origx, origy, destx, cos, sin);
         }
     }
 
-    slotClick(slot) {
+    async slotClick(slot) {
         if (this.board[slot])
             return;
 
@@ -392,18 +388,18 @@ class PowerPoker {
         const sin = dy / h;
         const cos = dx / h;
 
-        this.slotFly(458, 150, destx, cos, sin, () => this.slotSet(slot));
+        await this.slotFly(458, 150, destx, cos, sin);
+        await this.slotSet(slot);
     }
 
-    slotSet(slot_pos) {
+    async slotSet(slot_pos) {
         this.cardSet(this.slotElementGet(slot_pos), this.deck[this.curr]);
-        if (!this.boardCheck(slot_pos))
-            this.nextCheck();
+        await this.boardCheck(slot_pos);
     }
 
-    boardClick(slot_pos) {
+    async boardClick(slot_pos) {
         if (this.board_click)
-            this.board_click(slot_pos);
+            await this.board_click(slot_pos);
     }
 
     handEnable() {
