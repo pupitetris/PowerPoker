@@ -60,15 +60,15 @@ const HANDS = [
 ];
 
 const HAND_KEYS = {
-    _royal: 0,
-    _strfl: 1,
-    _4ofak: 2,
-    _str:   3,
-    _full:  4,
-    _3ofak: 5,
-    _flush: 6,
-    _2pair: 7,
-    _1pair: 8
+    royal:     0,
+    strfl:     1,
+    fourofak:  2,
+    str:       3,
+    full:      4,
+    threeofak: 5,
+    flush:     6,
+    twopair:   7,
+    onepair:   8
 };
 
 class PowerPoker {
@@ -176,21 +176,21 @@ class PowerPoker {
             key = 'flush';
         else if (same.length > 0) {
             if (same[0] == 3)
-                key = '4ofak';
+                key = 'fourofak';
             else if (same[0] == 2)
-                key = '3ofak';
+                key = 'threeofak';
             else {
                 if (same[1] == 2)
                     key = 'full';
                 else if (same[1] == 1)
-                    key = '2pair';
+                    key = 'twopair';
                 else
-                    key = '1pair';
+                    key = 'onepair';
             }
         }
 
         if (key) {
-            const points = HANDS[HAND_KEYS['_' + key]];
+            const points = HANDS[HAND_KEYS[key]];
             this.SCORE += points.score;
             this.handSet(points.str);
             return true;
