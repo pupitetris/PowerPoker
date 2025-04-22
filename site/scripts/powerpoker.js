@@ -158,7 +158,7 @@ class PowerPoker {
             okind = kind;
             suit = hand[i].card.substring(2);
             kind = parseInt(hand[i].card.substring(0, 2), 10);
-            hand[i].flag = false;
+            hand[i].blink = false;
 
             if (i == 0) continue;
             if (suit != osuit) flush = false;
@@ -167,8 +167,8 @@ class PowerPoker {
                 straight = false;
             if (kind == okind) {
                 lastSame++;
-                hand[i].flag = true;
-                hand[i - 1].flag = true;
+                hand[i].blink = true;
+                hand[i - 1].blink = true;
             } else if (lastSame > 0) {
                 same.push(lastSame);
                 lastSame = 0;
@@ -176,8 +176,8 @@ class PowerPoker {
         }
 
         if (straight || flush) {
-            for (let i = 0; i < HAND_SIZE; i++)
-                hand[i].flag = true;
+            for (const item of hand)
+                item.blink = true;
         } else {
             if (lastSame > 0)
                 same.push(lastSame);
@@ -276,16 +276,14 @@ class PowerPoker {
 
     handBlink(hand, i, func) {
         if (i == BLINK_TIMES || i == 0)
-            for (let j = 0; j < hand.length; j++) {
-                const card = hand[j];
-                if (card.flag) {
-                    const slot = this.slotElementGet(card.pos);
+            for (const item of hand)
+                if (item.blink) {
+                    const slot = this.slotElementGet(item.pos);
                     if (i)
                         slot.classList.add('blink');
                     else
                         slot.classList.remove('blink');
                 }
-            }
 
         this.blinkSet((i % 2)? true: false);
         if (i) {
@@ -316,13 +314,17 @@ class PowerPoker {
         window.setTimeout(() => this.boardTurnCard(0, className, xtra), 100);
     }
 
+    handAdd(hand, x, y) {
+        const pos = y * HAND_SIZE + x;
+        if (this.board[pos])
+            hand.push({ card: this.board[pos], pos: pos, blink: false });
+    }
+
     boardCheckCol(col) {
         const hand = [];
-        for (let y = 0; y < HAND_SIZE; y++) {
-            const pos = y * HAND_SIZE + col;
-            if (this.board[pos])
-                hand.push({card: this.board[pos], pos: pos});
-        }
+        for (let y = 0; y < HAND_SIZE; y++)
+            this.handAdd(hand, col, y);
+
         if (hand.length == HAND_SIZE &&
             this.handCheck(hand)) {
             this.handBlink(hand, BLINK_TIMES, () => this.nextCheck());
@@ -333,11 +335,9 @@ class PowerPoker {
 
     boardCheckRow(row, col) {
         const hand = [];
-        for (let x = 0; x < HAND_SIZE; x++) {
-            const pos = row * HAND_SIZE + x;
-            if (this.board[pos])
-                hand.push({card: this.board[pos], pos: pos});
-        }
+        for (let x = 0; x < HAND_SIZE; x++)
+            this.handAdd(hand, x, row);
+
         if (hand.length == HAND_SIZE &&
             this.handCheck(hand)) {
             this.handBlink(hand, BLINK_TIMES,
@@ -471,17 +471,14 @@ class PowerPoker {
         this.ele_handchip.onclick = () => this.handDisable();
 
         let html = '<table><caption>Poker Hand Point Values</caption>';
-        for (let i = 0; HANDS[i]; i++)
-            html += '<tr><th>' + HANDS[i].str + '</th><td>' + HANDS[i].score + '</td></tr>';
+        for (const hand of HANDS)
+            html += '<tr><th>' + hand.str + '</th><td>' + hand.score + '</td></tr>';
         html += '</table>';
         this.ele_scoretable.innerHTML = html;
 
-        const links = this.linkElementsGet();
-        for (let i = 0; i < links.length; i++) {
-            const link = links[i];
+        for (const link of this.linkElementsGet())
             if (link.target == '' && link.classList.contains('new-win'))
                 link.target = '_blank';
-        }
 
         this.high = cookieGet('this.high');
         if (!this.high)
