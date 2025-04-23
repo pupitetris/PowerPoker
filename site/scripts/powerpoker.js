@@ -36,6 +36,10 @@ function cmp(a, b) {
     return (a < b)? -1: (a > b)? 1: 0;
 }
 
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 async function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
@@ -49,7 +53,7 @@ const HAND_SIZE = 5;
 const SUITE_SIZE = 13;
 const DECK_SIZE = 52;
 const BOARD_SIZE = HAND_SIZE * HAND_SIZE;
-const FLY_SPEED = 10;
+const FLY_SPEED = 5;
 
 const HANDS = [
     { score: 400, str: 'Royal Flush' },
@@ -74,6 +78,9 @@ const HAND_KEYS = {
     twopair:   7,
     onepair:   8
 };
+
+const FLOAT_TRANSLATE_RE = /(^| +)translateY\([^)]+\)/;
+const FLOAT_ROTATE_RE = /(^| +)rotate\(([^)]+)\)/;
 
 class PowerPoker {
     constructor(ele_base) {
@@ -263,7 +270,7 @@ class PowerPoker {
             cookieSet('this.high', this.high, 99999);
             this.highSet(this.high);
         }
-        this.handSet('<span class="pp-gameover">Game Over</span>');
+        this.handSet('<span class="pp-gameover">Play Again</span>');
         this.ele_card_next.className = 'pp-card reverse hand';
         this.ele_card_next.onclick = () => this.gameInit();
     }
@@ -353,18 +360,40 @@ class PowerPoker {
         await this.nextCheck();
     }
 
-    async slotFly(origx, origy, destx, cos, sin) {
-        if (origx - destx < cos * FLY_SPEED * -1) {
-            this.ele_card_fly.style.display = 'none';
+    cardFloat(ele, z, angle) {
+        let trans = ele.style.transform.replace(FLOAT_TRANSLATE_RE, '');
+        if (z > 0) {
+            z *= 2;
+            const cos = Math.cos(angle);
+            const sin = Math.sin(angle);
+            const x = Math.floor(z * sin);
+            const y = Math.floor(z * cos);
+            ele.style.boxShadow = `${x}px ${y}px ${z}px rgba(0,0,0,0.5)`;
+            trans += ` translateY(${z}px)`;
         } else {
-            this.ele_card_fly.style.left = origx + 'px';
-            this.ele_card_fly.style.top = origy + 'px';
+            ele.style.boxShadow = '';
+        }
+        ele.style.transform = trans;
+    }
+
+    async slotFly(origx, origy, destx, cos, sin) {
+        let steps = Math.floor((destx - origx) / (cos * FLY_SPEED));
+        const dangle = (Math.PI * 2 / steps) * (random(0, 1)? -1: 1);
+        let angle = 0;
+
+        const card_fly = this.ele_card_fly;
+        while (steps > 0) {
+            card_fly.style.left = origx + 'px';
+            card_fly.style.top = origy + 'px';
+            card_fly.style.transform = `rotate(${angle}rad)`;
+            this.cardFloat(card_fly, Math.floor(Math.abs(Math.sin(angle / 2)) * 10), angle);
+            angle += dangle;
             origx += cos * FLY_SPEED;
             origy += sin * FLY_SPEED;
-
-            await wait(5);
-            await this.slotFly(origx, origy, destx, cos, sin);
+            steps --;
+            await wait(10);
         }
+        this.ele_card_fly.style.display = 'none';
     }
 
     async slotClick(slot) {
